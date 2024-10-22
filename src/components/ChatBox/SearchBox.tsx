@@ -226,7 +226,7 @@ const SearchBox = () => {
       }}
     >
       <textarea
-        placeholder="Type a message"
+        placeholder="Maximize your Idea's !"
         ref={textareaRef}
         rows={rows}
         value={text}

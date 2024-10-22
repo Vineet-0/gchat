@@ -12,6 +12,8 @@
 # production
 /build
 
+buildUploadToS3.js
+
 # misc
 .DS_Store
 .env.local
