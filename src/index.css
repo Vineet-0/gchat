@@ -5,7 +5,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 body {
-  @apply text-white bg-gray-900 font-poppins w-full h-screen max-h-screen overflow-hidden;
+  @apply text-white
+  bg-[#212121]
+  font-poppins w-full h-screen max-h-screen overflow-hidden;
+  font-size: 14px;
 }
 
 /* Custom scrollbar styling */
@@ -15,16 +18,17 @@ body {
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb {
-  background-color: aqua; /* Color of the scrollbar thumb */
   border-radius: 10px; /* Rounded corners on the thumb */
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb:vertical {
+  background-color: #434343; /* Color of the scrollbar thumb */
   margin-left: 20px;
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb:horizontal {
-  margin-top: 20px;
+  background-color: #494949; /* Color of the scrollbar thumb */
+  /* margin-top: 20px; */
 }
 
 .scrollbar-custom::-webkit-scrollbar-track {

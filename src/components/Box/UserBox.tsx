@@ -1,5 +1,6 @@
-import React from 'react';
-import TextViewer from '../Viewer/TextViewer';
+import React from "react";
+import TextViewer from "../Viewer/TextViewer";
+import ImageViewer from "../Viewer/ImageViewer";
 
 interface UserData {
   text?: string;
@@ -11,21 +12,15 @@ interface UserData {
 
 const UserBox = ({ data }: { data: UserData[] }) => {
   return (
-    <div className="w-fit bg-blue-600 my-2 p-2 rounded-3xl rounded-br-none">
-      {data.map((item, index) => (
-        <div key={index} className='flex flex-col items-end'>
-          {item.text ? (
-            <TextViewer data={item.text} />
-
-          ) : item.inline_data ? (
-            <img
-              src={`data:${item.inline_data.mime_type};base64,${item.inline_data.data}`}
-              alt="Inline Data"
-              className="max-w-[200px] h-auto mt-2 border-2 border-gray-200 rounded-2xl rounded-br-none"
-            />
-          ) : null}
+    <div className="flex flex-col items-end">
+      {data?.map((item, index) => (
+        <div key={index} className="w-fit max-w-full mt-2">
+          {item?.inline_data && <ImageViewer image={item?.inline_data} />}
         </div>
       ))}
+      <div className="w-fit max-w-full bg-[#424242] mt-1 px-2 py-1 rounded-xl overflow-auto scrollbar-custom">
+        <TextViewer text={data?.[0]?.text ?? ''}/>
+      </div>
     </div>
   );
 };

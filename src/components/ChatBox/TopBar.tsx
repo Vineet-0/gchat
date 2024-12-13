@@ -1,7 +1,17 @@
 import React, { useState } from "react";
-import { Box, Avatar, IconButton, Menu, MenuItem } from "@mui/material";
+import {
+  Box,
+  Avatar,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+} from "@mui/material";
 import { useDispatch } from "react-redux";
 import { clearChat } from "../../store/slices/chatSlice";
+
+import ClearIcon from "@mui/icons-material/Clear";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 function TopBar() {
   const userName = "Vineet";
@@ -28,6 +38,23 @@ function TopBar() {
     console.log("Logout button clicked");
   };
 
+  const MENU_ITEM = [
+    {
+      name: "Clear Chat",
+      backgroundColor: "orange",
+      hoverColor: "#dd9510",
+      onClick: handleClearChat,
+      icon: <ClearIcon />,
+    },
+    {
+      name: "Logout",
+      backgroundColor: "red",
+      hoverColor: "#EE0000",
+      onClick: handleLogout,
+      icon: <LogoutIcon />,
+    },
+  ];
+
   return (
     <Box
       sx={{
@@ -35,10 +62,10 @@ function TopBar() {
         display: "flex",
         alignItems: "center",
         justifyContent: "flex-end",
-        // paddingInline:'min(20px,5%)',
-        fontSize: "1.1rem",
+        fontSize: "0.7rem",
       }}
     >
+      <div className="text-[16px] font-bold text-white">{userName}</div>
       <IconButton
         aria-controls={open ? "account-menu" : undefined}
         aria-haspopup="true"
@@ -50,6 +77,7 @@ function TopBar() {
           {userName.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
+
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -63,9 +91,9 @@ function TopBar() {
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 0,
             px: 1,
+            py: 0,
+            backgroundColor: "#424242",
             "& .MuiAvatar-root": {
-              width: 32,
-              height: 32,
               ml: -0.5,
               mr: 1,
             },
@@ -74,10 +102,10 @@ function TopBar() {
               display: "block",
               position: "absolute",
               top: 0,
-              right: 23,
+              right: 16,
               width: 10,
               height: 10,
-              bgcolor: "background.paper",
+              bgcolor: "#424242",
               transform: "translateY(-50%) rotate(45deg)",
               zIndex: 0,
             },
@@ -86,51 +114,34 @@ function TopBar() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem
-          sx={{
-            width: "fit-content",
-            ml: "auto",
-          }}
-        >
-          {userName}
-        </MenuItem>
-        <MenuItem
-          onClick={handleClearChat}
-          sx={{
-            color: "white",
-            borderRadius: "5px",
-            backgroundColor: "orange",
-            width: "fit-content",
-            ml: "auto",
-            my: 1,
-            "&:hover": {
-              backgroundColor: "#dd9510",
-            },
-            "&:active": {
-              transform: "scale(0.95)",
-            },
-          }}
-        >
-          Clear Chat
-        </MenuItem>
-        <MenuItem
-          onClick={handleLogout}
-          sx={{
-            color: "white",
-            borderRadius: "5px",
-            backgroundColor: "red",
-            width: "fit-content",
-            ml: "auto",
-            "&:hover": {
-              backgroundColor: "#EE0000",
-            },
-            "&:active": {
-              transform: "scale(0.95)",
-            },
-          }}
-        >
-          Logout
-        </MenuItem>
+        {MENU_ITEM.map((item: any, index: any) => (
+          <MenuItem
+            key={item.name}
+            onClick={item.onClick}
+            sx={{
+              fontSize: "0.9rem",
+              fontWeight: "600",
+              textTransform: "capitalize",
+              py: 0.5,
+              px: 1,
+              color: "white",
+              borderRadius: "5px",
+              backgroundColor: item.backgroundColor,
+              width: "fit-content",
+              ml: "auto",
+              mb: index !== MENU_ITEM.length - 1 ? 1 : 0,
+              "&:hover": {
+                backgroundColor: item.hoverColor,
+              },
+              "&:active": {
+                transform: "scale(0.95)",
+              },
+            }}
+          >
+            <ListItemIcon aria-setsize={12}>{item.icon}</ListItemIcon>
+            {item.name}
+          </MenuItem>
+        ))}
       </Menu>
     </Box>
   );

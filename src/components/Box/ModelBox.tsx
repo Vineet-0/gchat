@@ -20,37 +20,47 @@ const ModelBox = ({ data }: { data: ModelData[] }) => {
   }, []);
 
   const formatData = (data: string) => {
-    const result = data.replace(/\*\*(.*?)\*\*/g, (_, boldText) => boldText);
+    // const afterBold = data?.replace(
+    //   /\*\*(.*?)\*\*/g,
+    //   (_, boldText) => `${boldText}`
+    // );
+    // const afterList = afterBold?.replace(
+    //   /\*(.*?)\n/g,
+    //   (_, boldText) => `•${boldText}\n`
+    // );
 
-    const newResult = result
-      .split(CODE_BREAKING_POINT)
-      .map((item, index) => (index % 2 === 0 ? item.trim() : item));
+    const newResult = data
+      ?.split(CODE_BREAKING_POINT)
+      ?.map((item, index) =>
+        index % 2 === 0
+          ? item
+              ?.replace(/\*\*(.*?)\*\*/g, (_, boldText) => `${boldText}`)
+              ?.replace(/\*(.*?)\n/g, (_, listText) => `•${listText}\n`)
+              ?.replace(/`([^`]*)`/g, (_, listText) => `${listText}`)
+              ?.trim()
+          : item
+      );
 
     setNewData(newResult);
   };
   return (
-    <div className="w-full flex-col gap-2 bg-[#343434] my-2 px-4 py-2 rounded-3xl rounded-bl-none">
+    <div className="w-full flex-col gap-2 bg-transparent p-2 rounded-3xl rounded-bl-none">
       {newData?.map((item: string, index: number) => (
         <div
           key={index}
           className={`
-            ${index % 2 == 0 && item.trim() !== "" ? "my-2" : ""}
+            ${index % 2 == 0 && item?.trim() !== "" ? "my-2" : ""}
           overflow-x-auto`}
         >
           {index % 2 == 0 ? (
             item.trim() !== "" ? (
-              <TextViewer data={item} />
+              <TextViewer text={item} />
             ) : null
           ) : (
-            // <CodeViewer data={item} />
-            <>
             <CodeViewer data={item} />
-            {/* <CodeViewer1 data={item} /> */}
-            </>
           )}
         </div>
       ))}
-      {/* {newData?.map((item, index) => index%2===0?<div key={index}>{item}</div>:<div key={index}>{item.language}+{item.code}</div>)} */}
     </div>
   );
 };

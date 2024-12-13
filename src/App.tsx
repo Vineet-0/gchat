@@ -1,10 +1,12 @@
 import React from "react";
 import Chat from "./pages/Chat";
+import SideBar from "./components/ChatBox/SideBar";
 
 function App() {
   return (
-    <div>
-        <Chat/>
+    <div className="w-full h-screen flex">
+      <SideBar />
+      <Chat />
     </div>
   );
 }

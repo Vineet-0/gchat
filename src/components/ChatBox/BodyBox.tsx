@@ -12,9 +12,9 @@ const BodyBox = () => {
   const loading = useSelector((state: RootState) => state.chat.loading);
   const dispatch = useDispatch<AppDispatch>();
 
-  // State to track the index of the hovered message
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setTimeout(() => {
       if (contentRef.current) {
@@ -30,11 +30,11 @@ const BodyBox = () => {
   };
 
   return (
-    <div className="w-[100%] flex-1 p-2 overflow-auto scrollbar-custom">
+    <div className="w-[100%] flex-1 mb-2 p-2 overflow-auto scrollbar-custom">
       {messages?.map((item, index: number) => (
         <div
           key={index}
-          className={`max-w-[90%] w-fit ${
+          className={`max-w-[80%] w-fit ${
             item.role === "user" ? "ml-auto" : "mr-auto"
           }
             `}
@@ -56,7 +56,7 @@ const BodyBox = () => {
               {hoveredIndex === index && (
                 <button
                   onClick={() => handleDelete(index)} // Call delete function
-                  className="absolute bottom-[-41px] right-0 mt-2 bg-red-500 text-white p-2 rounded-3xl rounded-tr-none"
+                  className="absolute bottom-0 right-0 mt-2 bg-red-500 text-white p-1.5 rounded-xl"
                 >
                   <DeleteForeverIcon />
                 </button>

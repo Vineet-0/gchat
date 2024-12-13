@@ -3,6 +3,7 @@ import axios from "axios";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import NorthIcon from "@mui/icons-material/North";
 
 import { addMessage, setLoading } from "../../store/slices/chatSlice";
 import { useSelector, useDispatch } from "react-redux";
@@ -118,17 +119,18 @@ const SearchBox = () => {
       })
       .then((response: any) => {
         const data =
-          response.data["candidates"][0]["content"]["parts"][0]["text"];
-        // console.log(data);
+          response?.data?.["candidates"]?.[0]?.["content"]?.["parts"]?.[0]?.[
+            "text"
+          ];
 
-        if (data) {
+        if (response?.status === 200 && data) {
           dispatch(addMessage({ role: "model", parts: [{ text: data }] }));
           dispatch(setLoading(false));
         } else {
           dispatch(
             addMessage({
               role: "model",
-              parts: [{ text: "Don't try to enter Sensitive Info" }],
+              parts: [{ text: "Something is Wrong with response" }],
             })
           );
           dispatch(setLoading(false));
@@ -136,7 +138,7 @@ const SearchBox = () => {
       })
       .catch((error) => {
         dispatch(
-          addMessage({ role: "model", parts: [{ text: error.message }] })
+          addMessage({ role: "model", parts: [{ text: error?.message }] })
         );
         dispatch(setLoading(false));
         console.log("got error");
@@ -144,7 +146,7 @@ const SearchBox = () => {
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event?.target?.files?.[0];
     if (file) {
       processFile(file);
     }
@@ -214,15 +216,17 @@ const SearchBox = () => {
       onDrop={handleDrop}
       sx={{
         width: "min(1000px, 100%)",
+        fontSize: "0.rem",
         marginInline: "auto",
         display: "flex",
         alignItems: "flex-end",
         justifyContent: "space-between",
-        paddingInline: "min(10px, 5%)",
-        border: isDragging ? "2px dashed #00f" : "1px dashed white",
-        borderRadius: "30px",
-        padding: "10px 20px",
-        backgroundColor: isDragging ? "rgba(0, 0, 255, 0.1)" : "transparent",
+        // paddingInline: "min(10px, 5%)",
+        border: isDragging ? "1px dashed #00f" : "0px dashed white",
+        borderRadius: "10px",
+        paddingInline: "8px 4px",
+        paddingBlock: "3px",
+        backgroundColor: isDragging ? "rgba(0, 0, 255, 0.1)" : "#424242",
       }}
     >
       <textarea
@@ -248,23 +252,26 @@ const SearchBox = () => {
         className="scrollbar-custom"
       />
       <Box
-        onMouseEnter={() => setShowDeleteIcon(true)}
-        onMouseLeave={() => setShowDeleteIcon(false)}
         sx={{
-          position: "relative",
           display: "flex",
-          alignItems: "center",
+          alignItems: "end",
+          paddingBlock: "1px",
           // height: "100%",
         }}
       >
         {uploadedImage ? (
-          <>
+          <div
+            onMouseEnter={() => setShowDeleteIcon(true)}
+            onMouseLeave={() => setShowDeleteIcon(false)}
+            className="relative"
+          >
             <img
               src={uploadedImage}
               alt="Uploaded"
               style={{
                 width: "40px",
                 height: "40px",
+                marginBlock: "auto",
                 borderRadius: "8px",
                 objectFit: "cover",
                 cursor: "pointer",
@@ -275,22 +282,33 @@ const SearchBox = () => {
                 onClick={clearUploadedImage}
                 sx={{
                   position: "absolute",
-                  top: "-16px",
-                  right: "-16px",
+                  top: "0px",
+                  right: "0px",
                   cursor: "pointer",
+                  width: "40px",
+                  height: "40px",
+                  padding: "5px",
                   backgroundColor: "red",
-                  borderRadius: "30% 30% 30% 0%",
+                  borderRadius: "8px",
                   color: "white",
                 }}
               />
             )}
-          </>
+          </div>
         ) : (
           <label
             htmlFor="file-upload"
             style={{ cursor: "pointer", paddingBlock: "10px" }}
           >
-            <AttachFileIcon style={{ fontSize: "1.5rem", color: "white" }} />
+            <AttachFileIcon
+              style={{
+                fontSize: "1.5rem",
+                width: "20px",
+                height: "20px",
+                color: "white",
+                marginInlineEnd: "5px",
+              }}
+            />
             <input
               id="file-upload"
               type="file"
@@ -301,8 +319,11 @@ const SearchBox = () => {
           </label>
         )}
         {text && (
-          <button onClick={handleAddMessage} className="text-white px-1">
-            <NearMeIcon style={{ fontSize: "1.5rem" }} />
+          <button
+            onClick={handleAddMessage}
+            className="text-white bg-[#212121] hover:bg-[#fff] rounded-lg ml-1 px-2 py-2"
+          >
+            <NorthIcon style={{ fontSize: "1.5rem" }} />
           </button>
         )}
       </Box>

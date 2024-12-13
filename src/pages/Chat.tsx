@@ -6,7 +6,7 @@ import SearchBox from '../components/ChatBox/SearchBox'
 const Chat = () => {
   return (
     <div className='mx-auto w-[min(1200px,100%)] h-screen max-h-screen overflow-hidden
-    flex flex-col gap-4 p-4'>
+    flex-1 flex flex-col px-2 pb-2'>
       <TopBar/>
       <BodyBox/>
       <SearchBox/> 
