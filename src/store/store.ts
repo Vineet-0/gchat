@@ -3,7 +3,7 @@ import chatReducer from './slices/chatSlice';
 
 const store = configureStore({
   reducer: {
-    chat: chatReducer,
+    chatsData: chatReducer,
   },
 });
 

@@ -5,7 +5,11 @@ import NearMeIcon from "@mui/icons-material/NearMe";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import NorthIcon from "@mui/icons-material/North";
 
-import { addMessage, setLoading } from "../../store/slices/chatSlice";
+import {
+  addQuestion,
+  addAnswer,
+  setLoading,
+} from "../../store/slices/chatSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
 
@@ -22,13 +26,19 @@ const SearchBox = () => {
   const [isDragging, setIsDragging] = useState(false);
   const maxRows = 10;
 
-  const messages = useSelector((state: RootState) => state.chat.messages);
-  const loading = useSelector((state: RootState) => state.chat.loading);
+  // Select chats and currentChatId from the Redux store
+  const { chats, currentChatId } = useSelector(
+    (state: RootState) => state.chatsData
+  );
+
+  // Find the current chat based on currentChatId
+  const currentChat = chats?.find((chat: any) => chat.chatId === currentChatId);
+  const loading = useSelector((state: RootState) => state.chatsData.loading);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     handleTextareaFocus();
-  }, [messages, loading]);
+  }, [currentChat, loading]);
 
   const handleTextareaFocus = () => {
     textareaRef.current?.focus();
@@ -57,9 +67,10 @@ const SearchBox = () => {
 
   const handleAddMessage = () => {
     if (text.trim() !== "") {
+      const data = currentChat?.data ?? [];
       if (uploadedImage) {
-        handleApisubmit([
-          ...messages,
+        const newData = [
+          ...data,
           {
             role: "user",
             parts: [
@@ -72,29 +83,30 @@ const SearchBox = () => {
               },
             ],
           },
-        ]);
+        ];
+        handleApisubmit(newData);
         dispatch(
-          addMessage({
-            role: "user",
-            parts: [
-              { text: text },
-              {
-                inline_data: {
-                  mime_type:
-                    uploadedImage?.split(";")?.[0]?.split(":")[1] || "",
-                  data: uploadedImage?.split(";")?.[1]?.substring(7),
+          addQuestion([
+            {
+              role: "user",
+              parts: [
+                { text: text },
+                {
+                  inline_data: {
+                    mime_type:
+                      uploadedImage?.split(";")?.[0]?.split(":")[1] || "",
+                    data: uploadedImage?.split(";")?.[1]?.substring(7),
+                  },
                 },
-              },
-            ],
-          })
+              ],
+            },
+          ])
         );
       } else {
-        handleApisubmit([
-          ...messages,
-          { role: "user", parts: [{ text: text }] },
-        ]);
+        const newData = [...data, { role: "user", parts: [{ text: text }] }];
+        handleApisubmit(newData);
 
-        dispatch(addMessage({ role: "user", parts: [{ text: text }] }));
+        dispatch(addQuestion([{ role: "user", parts: [{ text: text }] }]));
       }
       setText("");
       setRows(1);
@@ -124,22 +136,15 @@ const SearchBox = () => {
           ];
 
         if (response?.status === 200 && data) {
-          dispatch(addMessage({ role: "model", parts: [{ text: data }] }));
+          dispatch(addAnswer({ text: data }));
           dispatch(setLoading(false));
         } else {
-          dispatch(
-            addMessage({
-              role: "model",
-              parts: [{ text: "Something is Wrong with response" }],
-            })
-          );
+          dispatch(addAnswer({ text: "Something is Wrong with response" }));
           dispatch(setLoading(false));
         }
       })
       .catch((error) => {
-        dispatch(
-          addMessage({ role: "model", parts: [{ text: error?.message }] })
-        );
+        dispatch(addAnswer({ text: error?.message }));
         dispatch(setLoading(false));
         console.log("got error");
       });

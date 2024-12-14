@@ -29,17 +29,15 @@ const ModelBox = ({ data }: { data: ModelData[] }) => {
     //   (_, boldText) => `•${boldText}\n`
     // );
 
-    const newResult = data
-      ?.split(CODE_BREAKING_POINT)
-      ?.map((item, index) =>
-        index % 2 === 0
-          ? item
-              ?.replace(/\*\*(.*?)\*\*/g, (_, boldText) => `${boldText}`)
-              ?.replace(/\*(.*?)\n/g, (_, listText) => `•${listText}\n`)
-              ?.replace(/`([^`]*)`/g, (_, listText) => `${listText}`)
-              ?.trim()
-          : item
-      );
+    const newResult = data?.split(CODE_BREAKING_POINT)?.map((item, index) =>
+      index % 2 === 0
+        ? item
+            ?.replace(/\*\*(.*?)\*\*/g, (_, boldText) => `${boldText}`)
+            ?.replace(/\*(.*?)\n/g, (_, listText) => `•${listText}\n`)
+            ?.replace(/`([^`]*)`/g, (_, listText) => `${listText}`)
+            ?.trim()
+        : item
+    );
 
     setNewData(newResult);
   };
@@ -49,13 +47,11 @@ const ModelBox = ({ data }: { data: ModelData[] }) => {
         <div
           key={index}
           className={`
-            ${index % 2 == 0 && item?.trim() !== "" ? "my-2" : ""}
+            ${index % 2 == 0 && item?.trim() !== "" && "my-2"}
           overflow-x-auto`}
         >
           {index % 2 == 0 ? (
-            item.trim() !== "" ? (
-              <TextViewer text={item} />
-            ) : null
+            item.trim() !== "" && <TextViewer text={item} />
           ) : (
             <CodeViewer data={item} />
           )}

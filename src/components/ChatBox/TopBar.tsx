@@ -8,7 +8,7 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { clearChat } from "../../store/slices/chatSlice";
+// import { clearChat } from "../../store/slices/chatSlice";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -28,10 +28,10 @@ function TopBar() {
     setAnchorEl(null);
   };
 
-  const handleClearChat = () => {
-    dispatch(clearChat());
-    handleClose();
-  };
+  // const handleClearChat = () => {
+  //   dispatch(clearChat());
+  //   handleClose();
+  // };
 
   const handleLogout = () => {
     handleClose();
@@ -39,19 +39,19 @@ function TopBar() {
   };
 
   const MENU_ITEM = [
-    {
-      name: "Clear Chat",
-      backgroundColor: "orange",
-      hoverColor: "#dd9510",
-      onClick: handleClearChat,
-      icon: <ClearIcon />,
-    },
+    // {
+    //   name: "Clear Chat",
+    //   backgroundColor: "orange",
+    //   hoverColor: "#dd9510",
+    //   onClick: handleClearChat,
+    //   icon: <ClearIcon sx={{color:'white'}}/>,
+    // },
     {
       name: "Logout",
       backgroundColor: "red",
       hoverColor: "#EE0000",
       onClick: handleLogout,
-      icon: <LogoutIcon />,
+      icon: <LogoutIcon sx={{ color: "white" }} />,
     },
   ];
 
@@ -65,7 +65,7 @@ function TopBar() {
         fontSize: "0.7rem",
       }}
     >
-      <div className="text-[16px] font-bold text-white">{userName}</div>
+      <div className={`text-[16px] font-bold text-white`}>{userName}</div>
       <IconButton
         aria-controls={open ? "account-menu" : undefined}
         aria-haspopup="true"
@@ -102,7 +102,7 @@ function TopBar() {
               display: "block",
               position: "absolute",
               top: 0,
-              right: 16,
+              right: 23,
               width: 10,
               height: 10,
               bgcolor: "#424242",
@@ -127,7 +127,7 @@ function TopBar() {
               color: "white",
               borderRadius: "5px",
               backgroundColor: item.backgroundColor,
-              width: "fit-content",
+              // width: "fit-content",
               ml: "auto",
               mb: index !== MENU_ITEM.length - 1 ? 1 : 0,
               "&:hover": {

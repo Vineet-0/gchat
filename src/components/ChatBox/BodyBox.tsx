@@ -4,13 +4,19 @@ import { RootState, AppDispatch } from "../../store/store";
 import UserBox from "../Box/UserBox";
 import ModelBox from "../Box/ModelBox";
 import ModelLoadingBox from "../Box/ModelLoadingBox";
-import { deleteMessages } from "../../store/slices/chatSlice";
+import { deleteQuestionAnswer } from "../../store/slices/chatSlice";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { hostname } from "os";
 
 const BodyBox = () => {
-  const messages = useSelector((state: RootState) => state.chat.messages);
-  const loading = useSelector((state: RootState) => state.chat.loading);
-  const dispatch = useDispatch<AppDispatch>();
+  const { chats, currentChatId } = useSelector(
+    (state: RootState) => state.chatsData
+  );
+  const loading = useSelector((state: RootState) => state?.chatsData?.loading);
+
+  const currentChat = chats?.find(
+    (chat: any) => chat?.chatId === currentChatId
+  );
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -24,44 +30,37 @@ const BodyBox = () => {
         });
       }
     }, 100);
-  }, [messages, loading]);
-  const handleDelete = (index: number) => {
-    dispatch(deleteMessages(index));
-  };
+  }, [currentChat, loading]);
 
   return (
     <div className="w-[100%] flex-1 mb-2 p-2 overflow-auto scrollbar-custom">
-      {messages?.map((item, index: number) => (
+      {currentChat?.data?.map((item: any, index: number) => (
         <div
           key={index}
-          className={`max-w-[80%] w-fit ${
-            item.role === "user" ? "ml-auto" : "mr-auto"
+          className={`max-w-[90%] w-fit ${
+            item?.role === "user" ? "ml-auto" : "mr-auto"
           }
             `}
           ref={
             index ===
-            messages
-              .map((it, index) => (it.role === "user" ? index : null))
-              .filter((it) => it !== null)
-              .reverse()[0]
+            currentChat?.data
+              ?.map((it: any, index: any) =>
+                it.role === "user" ? index : null
+              )
+              ?.filter((it: any) => it !== null)
+              ?.reverse()?.[0]
               ? contentRef
               : null
           }
           onMouseEnter={() => setHoveredIndex(index)} // Set the hovered index
           onMouseLeave={() => setHoveredIndex(null)} // Clear the hovered index
         >
-          {item.role === "user" ? (
-            <div className="relative">
-              <UserBox data={item?.parts} />
-              {hoveredIndex === index && (
-                <button
-                  onClick={() => handleDelete(index)} // Call delete function
-                  className="absolute bottom-0 right-0 mt-2 bg-red-500 text-white p-1.5 rounded-xl"
-                >
-                  <DeleteForeverIcon />
-                </button>
-              )}
-            </div>
+          {item?.role === "user" ? (
+            <UserBox
+              data={item?.parts}
+              hoveredIndex={hoveredIndex}
+              index={index}
+            />
           ) : (
             <ModelBox data={item?.parts} />
           )}

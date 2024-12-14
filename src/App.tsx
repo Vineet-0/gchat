@@ -4,7 +4,7 @@ import SideBar from "./components/ChatBox/SideBar";
 
 function App() {
   return (
-    <div className="w-full h-screen flex">
+    <div className={`w-full h-screen flex`}>
       <SideBar />
       <Chat />
     </div>
