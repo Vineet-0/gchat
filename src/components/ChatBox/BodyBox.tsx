@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
+
 import UserBox from "../Box/UserBox";
 import ModelBox from "../Box/ModelBox";
 import ModelLoadingBox from "../Box/ModelLoadingBox";
-import { deleteQuestionAnswer } from "../../store/slices/chatSlice";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { hostname } from "os";
 
 const BodyBox = () => {
   const { chats, currentChatId } = useSelector(
@@ -52,8 +51,8 @@ const BodyBox = () => {
               ? contentRef
               : null
           }
-          onMouseEnter={() => setHoveredIndex(index)} // Set the hovered index
-          onMouseLeave={() => setHoveredIndex(null)} // Clear the hovered index
+          onMouseEnter={() => setHoveredIndex(index)}
+          onMouseLeave={() => setHoveredIndex(null)}
         >
           {item?.role === "user" ? (
             <UserBox

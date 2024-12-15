@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { CODE_BREAKING_POINT } from "../../config/BreakingPoint.config";
 
 import CodeViewer from "../Viewer/CodeViewer";
-import CodeViewer1 from "../Viewer/CodeViewer1";
 import TextViewer from "../Viewer/TextViewer";
 
 interface ModelData {
@@ -16,29 +15,22 @@ interface ModelData {
 const ModelBox = ({ data }: { data: ModelData[] }) => {
   const [newData, setNewData] = useState<string[]>([]);
   useEffect(() => {
-    formatData(data?.[0]?.text || "");
+    formatData(data?.[0]?.text ?? "");
   }, []);
 
   const formatData = (data: string) => {
-    // const afterBold = data?.replace(
-    //   /\*\*(.*?)\*\*/g,
-    //   (_, boldText) => `${boldText}`
-    // );
-    // const afterList = afterBold?.replace(
-    //   /\*(.*?)\n/g,
-    //   (_, boldText) => `•${boldText}\n`
-    // );
-
+                                
     const newResult = data?.split(CODE_BREAKING_POINT)?.map((item, index) =>
       index % 2 === 0
         ? item
             ?.replace(/\*\*(.*?)\*\*/g, (_, boldText) => `${boldText}`)
-            ?.replace(/\*(.*?)\n/g, (_, listText) => `•${listText}\n`)
+            ?.replace(/\s\*(.*?)\n/g, (_, listText) => ` 💮${listText}\n`)
             ?.replace(/`([^`]*)`/g, (_, listText) => `${listText}`)
             ?.trim()
-        : item
-    );
-
+            : item
+          );
+          // ?.replace(/\*(.*?)\n/g, (_, listText) => `•${listText}\n`)
+          
     setNewData(newResult);
   };
   return (

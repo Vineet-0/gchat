@@ -1,9 +1,12 @@
 import React from "react";
-import TextViewer from "../Viewer/TextViewer";
-import ImageViewer from "../Viewer/ImageViewer";
+
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
 import { deleteQuestionAnswer } from "../../store/slices/chatSlice";
+
+import TextViewer from "../Viewer/TextViewer";
+import ImageViewer from "../Viewer/ImageViewer";
+
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 interface UserData {
@@ -20,7 +23,7 @@ const UserBox = ({
   index,
 }: {
   data: UserData[];
-  hoveredIndex: number|null;
+  hoveredIndex: number | null;
   index: number;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,8 +44,8 @@ const UserBox = ({
       </div>
       {hoveredIndex === index && (
         <button
-          onClick={() => handleDelete(index)} // Call delete function
-          className="absolute bottom-0 right-0 mt-2 bg-red-500 text-white p-1.5 rounded-xl"
+          onClick={() => handleDelete(index)}
+          className="absolute bottom-[-35px] right-0 mt-2 bg-red-500 text-white p-1.5 rounded-xl"
         >
           <DeleteForeverIcon />
         </button>
