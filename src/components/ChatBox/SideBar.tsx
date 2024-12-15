@@ -7,6 +7,7 @@ import {
   setChatName,
   resetChats,
   clearCurrentChat,
+  toggleSideBar,
 } from "../../store/slices/chatSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
@@ -16,11 +17,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add"; // Import AddIcon
 import { Menu, MenuItem, IconButton, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import DensityMediumIcon from "@mui/icons-material/DensityMedium";
 
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const SideBar = () => {
-  const { chats, currentChatId, loading } = useSelector(
+  const { chats, currentChatId, loading, sideBarOpen } = useSelector(
     (state: RootState) => state?.chatsData
   );
   const currentChat = chats?.find(
@@ -80,22 +82,35 @@ const SideBar = () => {
   };
 
   return (
-    <div className="hidden md:block w-[250px] h-full bg-[#171717] p-2 select-none">
+    <div
+      className={`z-[1000] md:block fixed top-0 left-0 h-full overflow-y-auto bg-[#171717] p-2 select-none transition-all duration-300 ease-in-out ${
+        !sideBarOpen ? "translate-x-[-100%]" : "" // Use translate-x for smoother transition
+      }`}
+      style={{ width: "250px", right: 0 }} // Use style for width, avoids conflict with translate-x
+    >
       <div className="w-full h-full flex flex-col gap-2">
-        <Button
-          variant="contained"
-          onClick={() => !loading && dispatch(addChat())}
-          startIcon={<AddIcon />}
-          sx={{
-            backgroundColor: (theme) => theme?.palette?.primary?.main,
-            color: (theme) => theme?.palette?.common?.white,
-            "&:hover": {
-              backgroundColor: (theme) => theme?.palette?.primary?.dark,
-            },
-          }}
-        >
-          Add Chat
-        </Button>
+        <div className="w-full flex items-center justify-between">
+          <button
+            onClick={() => !loading && dispatch(toggleSideBar())}
+            className="px-2"
+          >
+            <DensityMediumIcon />
+          </button>
+          <Button
+            variant="contained"
+            onClick={() => !loading && dispatch(addChat())}
+            startIcon={<AddIcon />}
+            sx={{
+              backgroundColor: (theme) => theme?.palette?.primary?.main,
+              color: (theme) => theme?.palette?.common?.white,
+              "&:hover": {
+                backgroundColor: (theme) => theme?.palette?.primary?.dark,
+              },
+            }}
+          >
+            Add Chat
+          </Button>
+        </div>
         <div className="w-full h-full flex flex-col gap-1 flex-1 overflow-auto scrollbar-custom">
           {chats.map((item, index) => (
             <div
@@ -108,7 +123,7 @@ const SideBar = () => {
                 item.chatId === currentChatId ? "bg-[#2f2f2f]" : ""
               }`}
             >
-              <div className="overflow-hidden w-full max-h-4">
+              <div className="overflow-hidden w-full max-h-6 flex text-nowrap">
                 {item?.name || getChatDisplayName(item) || `Chat - ${index}`}
               </div>
               <button

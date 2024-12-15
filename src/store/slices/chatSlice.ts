@@ -24,20 +24,23 @@ interface ChatState {
   chats: Chat[]; // All chats
   currentChatId: string | null; // Currently active chat ID
   loading: boolean; // Loading state
+  sideBarOpen: boolean; // Add sideBarOpen state
 }
 
 // Retrieve the chat history from localStorage or initialize with a default chat
 const getInitialState = (): ChatState => {
-  const chatHistory = localStorage?.getItem("chatHistory");
-  const currentChatId = localStorage?.getItem("currentChatId");
+  const chatHistory = localStorage.getItem("chatHistory");
+  const currentChatId = localStorage.getItem("currentChatId");
+  const sideBarOpenString = localStorage.getItem("sideBarOpen"); // Get sideBarOpen from localStorage
+  const sideBarOpen = sideBarOpenString === null ? true : JSON.parse(sideBarOpenString); // Parse and use default if null
 
   if (chatHistory) {
     const chats = JSON.parse(chatHistory);
     return {
       chats,
-      currentChatId:
-        currentChatId || (chats?.length > 0 ? chats?.[0]?.chatId : null),
+      currentChatId: currentChatId || (chats.length > 0 ? chats[0].chatId : null),
       loading: false,
+      sideBarOpen, // Include sideBarOpen in the returned state
     };
   } else {
     const defaultChatId = uuidv4();
@@ -47,10 +50,12 @@ const getInitialState = (): ChatState => {
       chats: [defaultChat],
       currentChatId: defaultChatId,
       loading: false,
+      sideBarOpen: true, // Set default value for sideBarOpen
     };
 
-    localStorage.setItem("chatHistory", JSON.stringify(initialState?.chats));
+    localStorage.setItem("chatHistory", JSON.stringify(initialState.chats));
     localStorage.setItem("currentChatId", defaultChatId);
+    localStorage.setItem("sideBarOpen", JSON.stringify(initialState.sideBarOpen)); // Save sideBarOpen to localStorage
     return initialState;
   }
 };
@@ -172,6 +177,7 @@ const chatSlice = createSlice({
         chats: [defaultChat],
         currentChatId: defaultChatId,
         loading: false,
+        sideBarOpen: true,
       };
 
       localStorage.removeItem("chatHistory");
@@ -190,6 +196,10 @@ const chatSlice = createSlice({
         }
       }
     },
+    toggleSideBar: (state) => {
+      state.sideBarOpen = !state.sideBarOpen;
+      localStorage.setItem("sideBarOpen", JSON.stringify(state.sideBarOpen));
+    },
   },
 });
 
@@ -205,7 +215,8 @@ export const {
   setChatName, // Export setChatName action
   setChatOrder,
   resetChats,
-  clearCurrentChat
+  clearCurrentChat,
+  toggleSideBar
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
