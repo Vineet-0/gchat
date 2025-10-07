@@ -8,25 +8,11 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import {
-  addChat,
-  setLoading,
-  setCurrentChatId,
-  deleteChat,
-  setChatName,
-  resetChats,
-  clearCurrentChat,
   toggleSideBar
 } from "../../store/slices/chatSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EditIcon from "@mui/icons-material/Edit";
-import AddIcon from "@mui/icons-material/Add"; // Import AddIcon
-import { styled } from "@mui/material/styles";
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
-
-import ClearIcon from "@mui/icons-material/Clear";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 function TopBar() {
@@ -34,7 +20,7 @@ function TopBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const { chats, currentChatId, loading,sideBarOpen } = useSelector(
+  const { loading,sideBarOpen } = useSelector(
       (state: RootState) => state?.chatsData
     );
 
@@ -94,7 +80,7 @@ function TopBar() {
       // Clean up event listener on component unmount
       window.removeEventListener("resize", handleWindowResize);
     };
-  }, [sideBarOpen, dispatch]); // Add sideBarOpen and dispatch to dependency array
+  }, [sideBarOpen, dispatch,handleWindowResize]); // Add sideBarOpen and dispatch to dependency array
 
   return (
     <Box

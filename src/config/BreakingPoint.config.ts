@@ -1,1 +1,1 @@
-export const CODE_BREAKING_POINT = '```'
+export const CODE_BREAKING_POINT = "```";
