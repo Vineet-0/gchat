@@ -13,13 +13,14 @@ const CodeViewer = ({ data }: { data: string }) => {
     useEffect(() => {
         const newLanguage =
             data?.substring(0, data?.indexOf("\n"))?.trim() ?? data;
+        console.log("data", data);
         const newCode =
             data
                 ?.substring(data?.indexOf("\n") + 1)
                 ?.split("\n")
-                ?.map((item) => (item?.[0] === " " ? item.substring(3) : item))
+                ?.map((item) => (item?.[0] === "" ? item.substring(3) : item))
                 ?.join("\n") ?? data;
-
+        console.log("newCode", newCode);
         setLanguage(newLanguage);
         setCode(newCode);
     }, [data]);
