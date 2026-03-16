@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
     Box,
     Avatar,
@@ -59,17 +59,17 @@ function TopBar() {
         },
     ];
 
-    const handleWindowResize = () => {
+    const handleWindowResize = useCallback(() => {
         const windowWidth = window.innerWidth;
         if (windowWidth < 768 && sideBarOpen) {
-            // Call function x (or any other action)
-            dispatch(toggleSideBar()); // Example: Close the sidebar
+            // Close the sidebar on small screens if it's open
+            dispatch(toggleSideBar());
         }
         if (windowWidth >= 1024 && !sideBarOpen) {
-            // Call function y (or any other action)
-            dispatch(toggleSideBar()); // Example: Open the sidebar
+            // Open the sidebar on large screens if it's closed
+            dispatch(toggleSideBar());
         }
-    };
+    }, [sideBarOpen, dispatch]);
 
     useEffect(() => {
         // Add event listener for window resize
@@ -78,7 +78,7 @@ function TopBar() {
             // Clean up event listener on component unmount
             window.removeEventListener("resize", handleWindowResize);
         };
-    }, [sideBarOpen, dispatch]); // Add sideBarOpen and dispatch to dependency array
+    }, [handleWindowResize]);
 
     return (
         <Box

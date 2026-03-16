@@ -18,7 +18,7 @@ const ImageViewer = ({ image }: { image: any }) => {
             {image ? (
                 <img
                     src={`data:${image?.mime_type};base64,${image?.data}`}
-                    alt="Inline Data"
+                    alt="Attachment preview"
                     className="max-w-[200px] h-auto rounded-md cursor-pointer"
                     onClick={handleOpen}
                 />
@@ -51,7 +51,7 @@ const ImageViewer = ({ image }: { image: any }) => {
                 <DialogContent sx={{ padding: "0px !important" }}>
                     <img
                         src={`data:${image?.mime_type};base64,${image?.data}`}
-                        alt="Fullscreen Image"
+                        alt="Attachment fullscreen"
                         style={{
                             width: "fit-content !important",
                             maxWidth: "100%",
