@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-    Dialog,
-    DialogContent,
-    IconButton,
-    useTheme,
-} from "@mui/material";
+import { Dialog, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const ImageViewer = ({ image }: { image: any }) => {
